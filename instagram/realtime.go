@@ -20,9 +20,36 @@ type Realtime struct {
 	CallbackURL string `json:"callback_url,omitempty"`
 }
 
-// MediaComments gets a full list of comments on a media.
+type RealtimeResponse struct {
+	SubscriptionID int64  `json:"subscription_id,omitempty"`
+	Object         string `json:"object,omitempty"`
+	ObjectID       string `json:"object_id,omitempty"`
+	ChangedAspect  string `json:"changed_aspect,omitempty"`
+	Time           int64  `json:"time,omitempty"`
+}
+
+//ListSubscriptions ists the realtime subscriptions that are already active for your account
+func (s *RealtimeService) ListSubscriptions() ([]Realtime, error) {
+	u := "subscriptions/"
+
+	req, err := s.client.NewRequest("GET", u, "")
+	if err != nil {
+		return nil, err
+	}
+
+	realtime := new([]Realtime)
+
+	_, err = s.client.Do(req, realtime)
+	if err != nil {
+		return nil, err
+	}
+
+	return *realtime, err
+}
+
+// SubscribeToTag initiates the subscription to realtime updates about tag `tag`
 //
-// Instagram API docs: http://instagram.com/developer/endpoints/comments/#get_media_comments
+// Instagram API docs: http://instagram.com/developer/realtime/
 func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (*Realtime, error) {
 	u := "subscriptions/"
 
@@ -55,8 +82,6 @@ func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (
 // any standard http server. Note, however, that this particular implementation does
 // no checking that the verifyToken is correct.
 func ServeInstagramRealtimeSubscribe(w http.ResponseWriter, r *http.Request) {
-	//You would think this would be "PostFormValue", but Instagram is sending the
-	// challenge and response data as query strings in a POST, not as POST elements in a POST
 	verify := r.FormValue("hub.challenge")
 
 	fmt.Fprintf(w, verify)
