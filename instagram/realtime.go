@@ -6,17 +6,8 @@ import (
 	"net/url"
 )
 
-type RealtimeResponse struct {
-	Data Realtime
-	Meta RealtimeMeta
-}
-
 type RealtimeService struct {
 	client *Client
-}
-
-type RealtimeMeta struct {
-	Code int `json:"code,omitempty"`
 }
 
 // Realtime represents a realtime subscription on Instagram's service.
@@ -32,7 +23,7 @@ type Realtime struct {
 // MediaComments gets a full list of comments on a media.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/comments/#get_media_comments
-func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (*RealtimeResponse, error) {
+func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (*Realtime, error) {
 	u := "subscriptions/"
 
 	params := url.Values{
@@ -50,14 +41,14 @@ func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (
 		return nil, err
 	}
 
-	realtimeResponse := new(RealtimeResponse)
+	realtime := new(Realtime)
 
-	_, err = s.client.Do(req, realtimeResponse)
+	_, err = s.client.Do(req, realtime)
 	if err != nil {
 		return nil, err
 	}
 
-	return realtimeResponse, err
+	return realtime, err
 }
 
 //An example RealTimeSubscribe ResponseWriter. This can be plugged directly into
