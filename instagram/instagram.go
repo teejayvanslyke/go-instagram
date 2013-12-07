@@ -81,6 +81,7 @@ type Client struct {
 	Tags          *TagsService
 	Locations     *LocationsService
 	Geographies   *GeographiesService
+	Realtime      *RealtimeService
 
 	// Temporary Response
 	Response *Response
@@ -205,6 +206,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Tags = &TagsService{client: c}
 	c.Locations = &LocationsService{client: c}
 	c.Geographies = &GeographiesService{client: c}
+	c.Realtime = &RealtimeService{client: c}
 
 	return c
 }
