@@ -78,6 +78,35 @@ func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (
 	return realtime, err
 }
 
+// DeleteAllSubscriptions deletes all active subscriptions for an account.
+//
+// Instagram API docs: http://instagram.com/developer/realtime/
+func (s *RealtimeService) DeleteAllSubscriptions() (*Realtime, error) {
+	u := "subscriptions/"
+
+	params := url.Values{
+		"object":        {"all"},
+		"client_id":     {s.client.ClientID},
+		"client_secret": {s.client.ClientSecret},
+	}
+
+	u += "?" + params.Encode()
+
+	req, err := s.client.NewRequest("DELETE", u, "")
+	if err != nil {
+		return nil, err
+	}
+
+	realtime := new(Realtime)
+
+	_, err = s.client.Do(req, realtime)
+	if err != nil {
+		return nil, err
+	}
+
+	return realtime, err
+}
+
 //An example RealTimeSubscribe ResponseWriter. This can be plugged directly into
 // any standard http server. Note, however, that this particular implementation does
 // no checking that the verifyToken is correct.
