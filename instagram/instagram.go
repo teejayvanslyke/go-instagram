@@ -43,7 +43,7 @@ import (
 
 const (
 	// LibraryVersion represents this library version
-	LibraryVersion = "0.4"
+	LibraryVersion = "0.5"
 
 	// BaseURL represents Instagram API base URL
 	BaseURL = "https://api.instagram.com/v1/"
@@ -99,8 +99,12 @@ type Parameters struct {
 	Distance     float64
 }
 
+// Ratelimit specifies API calls limit found in HTTP headers.
 type Ratelimit struct {
-	Limit     int
+	// Total number of possible calls per hour
+	Limit int
+
+	// How many calls are left for this particular token or client ID
 	Remaining int
 }
 
