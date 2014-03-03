@@ -2,6 +2,8 @@ go-instagram
 ============
 
 go-instagram is Go library for accessing Instagram REST and Search APIs.
+This is a fork of https://github.com/gedex/go-instagram . The primary intended
+difference is that this fork adds support for some elements of the realtime API.
 
 **Documentation:** <http://godoc.org/github.com/carbocation/go-instagram/instagram>
 

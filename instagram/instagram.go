@@ -49,7 +49,7 @@ const (
 	BaseURL = "https://api.instagram.com/v1/"
 
 	// UserAgent represents this client User-Agent
-	UserAgent = "github.com/gedex/go-instagram v" + LibraryVersion
+	UserAgent = "github.com/carbocation/go-instagram v" + LibraryVersion
 )
 
 // A Client manages communication with the Instagram API.

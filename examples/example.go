@@ -7,7 +7,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gedex/go-instagram/instagram"
+	"github.com/carbocation/go-instagram/instagram"
 	"os"
 )
 
