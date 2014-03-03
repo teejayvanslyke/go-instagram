@@ -33,6 +33,7 @@ type Media struct {
 	UserHasLiked bool           `json:"user_has_liked,omitempty"`
 	CreatedTime  int64          `json:"created_time,string,omitempty"`
 	Images       *MediaImages   `json:"images,omitempty"`
+	Videos       *MediaVideos   `json:"videos,omitempty"`
 	ID           string         `json:"id,omitempty"`
 	Location     *MediaLocation `json:"location,omitempty"`
 }
@@ -86,7 +87,6 @@ type MediaImage struct {
 // MediaVideos represents MediaVideo with various resolutions.
 type MediaVideos struct {
 	LowResolution      *MediaVideo `json:"low_resolution,omitempty"`
-	Thumbnail          *MediaVideo `json:"thumbnail,omitempty"`
 	StandardResolution *MediaVideo `json:"standard_resolution,omitempty"`
 }
 
