@@ -6,6 +6,7 @@
 package instagram
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 )
@@ -63,7 +64,7 @@ func (s *TagsService) RecentMedia(tagName string, opt *Parameters) ([]Media, *Re
 
 	_, err = s.client.Do(req, media)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, errors.New(fmt.Sprintf("go-instagram Tag.RecentMedia error:%s", err))
 	}
 
 	page := new(ResponsePagination)
