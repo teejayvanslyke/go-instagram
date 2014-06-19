@@ -64,7 +64,7 @@ func (s *TagsService) RecentMedia(tagName string, opt *Parameters) ([]Media, *Re
 
 	_, err = s.client.Do(req, media)
 	if err != nil {
-		return nil, nil, errors.New(fmt.Sprintf("go-instagram Tag.RecentMedia error:%s", err))
+		return nil, nil, errors.New(fmt.Sprintf("go-instagram Tag.RecentMedia error:%v on URL %s", err, req.URL.String()))
 	}
 
 	page := new(ResponsePagination)
