@@ -36,7 +36,7 @@ func TestTagsService_RecentMedia(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/tags/tag-name/media/recent", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/tags/tagname/media/recent", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{
 			"min_id": "1",
@@ -49,7 +49,7 @@ func TestTagsService_RecentMedia(t *testing.T) {
 		MinID: "1",
 		MaxID: "1",
 	}
-	media, _, err := client.Tags.RecentMedia("tag-name", opt)
+	media, _, err := client.Tags.RecentMedia("tagname", opt)
 	if err != nil {
 		t.Errorf("Tags.RecentMedia returned error: %v", err)
 	}
