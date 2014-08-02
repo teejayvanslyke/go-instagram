@@ -280,6 +280,23 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 type ErrorResponse Response
 
 func (r *ErrorResponse) Error() string {
+	if r == nil {
+		return fmt.Sprintf("A nil error response was returned")
+	}
+
+	if r.Response == nil || r.Response.Request == nil {
+		return fmt.Sprintf("A nil error response was returned on %v", r)
+	}
+
+	if r.Response.Request.URL == nil {
+		return fmt.Sprintf("A nil error response was returned on %v", r.Response.Request)
+	}
+
+	if r.Meta == nil {
+		return fmt.Sprintf("%v %v: %d (no metadata)", r.Response.Request.Method, r.Response.Request.URL,
+			r.Response.StatusCode)
+	}
+
 	return fmt.Sprintf("%v %v: %d %v %v",
 		r.Response.Request.Method, r.Response.Request.URL,
 		r.Response.StatusCode, r.Meta.ErrorType, r.Meta.ErrorMessage)
