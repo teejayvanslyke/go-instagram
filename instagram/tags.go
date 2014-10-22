@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
+	"strconv"
 )
 
 // TagsService handles communication with the tag related
@@ -61,6 +62,9 @@ func (s *TagsService) RecentMedia(tagName string, opt *Parameters) ([]Media, *Re
 	u := fmt.Sprintf("tags/%v/media/recent", tagName)
 	if opt != nil {
 		params := url.Values{}
+		if opt.Count != 0 {
+			params.Add("count", strconv.FormatUint(opt.Count, 10))
+		}
 		if opt.MinID != "" {
 			params.Add("min_id", opt.MinID)
 		}

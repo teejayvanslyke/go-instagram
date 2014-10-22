@@ -41,6 +41,7 @@ func TestTagsService_RecentMedia(t *testing.T) {
 		testFormValues(t, r, values{
 			"min_id": "1",
 			"max_id": "1",
+			"count":  "1",
 		})
 		fmt.Fprint(w, `{"data": [{"id":"1"}]}`)
 	})
@@ -48,6 +49,7 @@ func TestTagsService_RecentMedia(t *testing.T) {
 	opt := &Parameters{
 		MinID: "1",
 		MaxID: "1",
+		Count: 1,
 	}
 	media, _, err := client.Tags.RecentMedia("tagname", opt)
 	if err != nil {
