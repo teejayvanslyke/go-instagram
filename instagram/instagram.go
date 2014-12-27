@@ -33,6 +33,9 @@ package instagram
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -71,6 +74,14 @@ type Client struct {
 
 	// Authenticated user's access_token
 	AccessToken string
+
+	// For Authenticated endpoints, using X-Forwarded-For
+	// increases events per hour permitted by Instagram
+	// This value should, if not nil, be the value of
+	// a user's IP address. See
+	// http://instagram.com/developer/restrict-api-requests/
+	// for additional detail
+	XInstaForwardedFor string
 
 	// Services used for talking to different parts of the API.
 	Users         *UsersService
@@ -215,6 +226,17 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
+func (c *Client) ComputeXInstaForwardedFor() string {
+	if c.XInstaForwardedFor == "" {
+		return ""
+	}
+
+	mac := hmac.New(sha256.New, []byte(c.ClientSecret))
+	mac.Write([]byte(c.XInstaForwardedFor))
+
+	return fmt.Sprintf("%s|%s", c.XInstaForwardedFor, hex.EncodeToString(mac.Sum(nil)))
+}
+
 // NewRequest creates an API request. A relative URL can be provided in urlStr,
 // in which case it is resolved relative to the BaseURL of the Client.
 // Relative URLs should always be specified without a preceding slash. If
@@ -245,6 +267,10 @@ func (c *Client) NewRequest(method, urlStr string, body string) (*http.Request, 
 
 	if method == "POST" {
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	if c.XInstaForwardedFor != "" {
+		req.Header.Add("X-Insta-Forwarded-For", c.ComputeXInstaForwardedFor())
 	}
 
 	req.Header.Add("User-Agent", c.UserAgent)
@@ -328,7 +354,22 @@ func CheckResponse(r *http.Response) error {
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err == nil && data != nil {
-		json.Unmarshal(data, resp)
+		// Unlike for successful (2XX) requests, unsuccessful
+		// requests SOMETIMES have the {Meta: Error{}} format but
+		// SOMETIMES they are just Error{}. From what I can tell, there is not
+		// an obvious rationale behind what gets constructed in which way, so
+		// we need to try both:
+		meta := new(ResponseMeta)
+		json.Unmarshal(data, meta)
+		if *meta != *new(ResponseMeta) {
+			// Unmarshaling did something
+			resp.Meta = meta
+		} else {
+			// Unmarshaling did nothing for us, so the format was not Error{}.
+			// We will assume the format was {Meta: Error{}}:
+			json.Unmarshal(data, resp)
+		}
 	}
+
 	return resp
 }

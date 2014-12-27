@@ -41,6 +41,7 @@ func TestLikesService_Like(t *testing.T) {
 		fmt.Fprint(w, `{"meta": {"code": 200}, "data": null}`)
 	})
 
+	client.XInstaForwardedFor = "127.0.0.1"
 	err := client.Likes.Like("1")
 	if err != nil {
 		t.Errorf("Likes.Like returned error: %v", err)
