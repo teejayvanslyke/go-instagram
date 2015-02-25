@@ -25,6 +25,10 @@ type Relationship struct {
 	// A user's relationship to current user. Can be "followed_by", "requested_by",
 	// "blocked_by_you", or "none".
 	IncomingStatus string `json:"incoming_status,omitempty"`
+
+	// Undocumented part of the API, though was stable at least from 2012-2015
+	// Informs whether the target user is a private user
+	TargetUserIsPrivate bool `json:"target_user_is_private,omitempty"`
 }
 
 // Follows gets the list of users this user follows. If empty string is
