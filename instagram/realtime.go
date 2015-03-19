@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type RealtimeService struct {
@@ -57,6 +58,70 @@ func (s *RealtimeService) SubscribeToTag(tag, callbackURL, verifyToken string) (
 		"aspect":        {"media"},
 		"object":        {"tag"},
 		"object_id":     {tag},
+		"callback_url":  {callbackURL},
+		"client_id":     {s.client.ClientID},
+		"client_secret": {s.client.ClientSecret},
+		"verify_token":  {verifyToken},
+	}
+
+	req, err := s.client.NewRequest("POST", u, params.Encode())
+	if err != nil {
+		return nil, err
+	}
+
+	realtime := new(Realtime)
+
+	_, err = s.client.Do(req, realtime)
+	if err != nil {
+		return nil, err
+	}
+
+	return realtime, err
+}
+
+// SubscribeToLocation initiates the subscription to realtime updates about location `locationId`
+//
+// Instagram API docs: http://instagram.com/developer/realtime/
+func (s *RealtimeService) SubscribeToLocation(locationId, callbackURL, verifyToken string) (*Realtime, error) {
+	u := "subscriptions/"
+
+	params := url.Values{
+		"aspect":        {"media"},
+		"object":        {"location"},
+		"object_id":     {locationId},
+		"callback_url":  {callbackURL},
+		"client_id":     {s.client.ClientID},
+		"client_secret": {s.client.ClientSecret},
+		"verify_token":  {verifyToken},
+	}
+
+	req, err := s.client.NewRequest("POST", u, params.Encode())
+	if err != nil {
+		return nil, err
+	}
+
+	realtime := new(Realtime)
+
+	_, err = s.client.Do(req, realtime)
+	if err != nil {
+		return nil, err
+	}
+
+	return realtime, err
+}
+
+// SubscribeToGeography initiates the subscription to realtime updates about geography `lat,lng,radius`
+//
+// Instagram API docs: http://instagram.com/developer/realtime/
+func (s *RealtimeService) SubscribeToGeography(lat, lng string, radius int, callbackURL, verifyToken string) (*Realtime, error) {
+	u := "subscriptions/"
+
+	params := url.Values{
+		"aspect":        {"media"},
+		"object":        {"location"},
+		"lat":           {lat},
+		"lng":           {lng},
+		"radius":        {strconv.Itoa(radius)},
 		"callback_url":  {callbackURL},
 		"client_id":     {s.client.ClientID},
 		"client_secret": {s.client.ClientSecret},
