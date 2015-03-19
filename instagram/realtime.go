@@ -118,7 +118,7 @@ func (s *RealtimeService) SubscribeToGeography(lat, lng string, radius int, call
 
 	params := url.Values{
 		"aspect":        {"media"},
-		"object":        {"location"},
+		"object":        {"geography"},
 		"lat":           {lat},
 		"lng":           {lng},
 		"radius":        {strconv.Itoa(radius)},
