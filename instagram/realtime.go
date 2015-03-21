@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// RealtimeService has client info
 type RealtimeService struct {
 	client *Client
 }
@@ -20,6 +21,7 @@ type Realtime struct {
 	CallbackURL string `json:"callback_url,omitempty"`
 }
 
+// RealtimeResponse represents JSON structure
 type RealtimeResponse struct {
 	SubscriptionID int64  `json:"subscription_id,omitempty"`
 	Object         string `json:"object,omitempty"`
@@ -136,7 +138,7 @@ func (s *RealtimeService) UnsubscribeFrom(sid string) (*Realtime, error) {
 	return realtime, err
 }
 
-//An example RealTimeSubscribe ResponseWriter. This can be plugged directly into
+// ServeInstagramRealtimeSubscribe - an example RealTimeSubscribe ResponseWriter. This can be plugged directly into
 // any standard http server. Note, however, that this particular implementation does
 // no checking that the verifyToken is correct.
 func ServeInstagramRealtimeSubscribe(w http.ResponseWriter, r *http.Request) {

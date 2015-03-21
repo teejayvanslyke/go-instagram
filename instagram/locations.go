@@ -30,8 +30,8 @@ type Location struct {
 // Get information about a location.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/locations/#get_locations
-func (s *LocationsService) Get(locationId string) (*Location, error) {
-	u := fmt.Sprintf("locations/%v", locationId)
+func (s *LocationsService) Get(locationID string) (*Location, error) {
+	u := fmt.Sprintf("locations/%v", locationID)
 	req, err := s.client.NewRequest("GET", u, "")
 	if err != nil {
 		return nil, err
@@ -45,8 +45,8 @@ func (s *LocationsService) Get(locationId string) (*Location, error) {
 // RecentMedia gets a list of recent media from a given location.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/locations/#get_locations_media_recent
-func (s *LocationsService) RecentMedia(locationId string, opt *Parameters) ([]Media, *ResponsePagination, error) {
-	u := fmt.Sprintf("locations/%v/media/recent", locationId)
+func (s *LocationsService) RecentMedia(locationID string, opt *Parameters) ([]Media, *ResponsePagination, error) {
+	u := fmt.Sprintf("locations/%v/media/recent", locationID)
 	if opt != nil {
 		params := url.Values{}
 		if opt.MinTimestamp != 0 {

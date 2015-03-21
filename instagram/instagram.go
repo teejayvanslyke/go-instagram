@@ -154,7 +154,7 @@ func (r *Response) GetPagination() *ResponsePagination {
 	return r.Pagination
 }
 
-// Parsed rate limit information from response headers.
+// GetRatelimit returns parsed rate limit information from response headers.
 func (r *Response) GetRatelimit() (Ratelimit, error) {
 	var rl Ratelimit
 	var err error
@@ -226,6 +226,7 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
+// ComputeXInstaForwardedFor returns value for X-Insta-Forwarded-For header
 func (c *Client) ComputeXInstaForwardedFor() string {
 	if c.XInstaForwardedFor == "" {
 		return ""
@@ -302,11 +303,11 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 	return resp, err
 }
 
-// InstagramError represents an error recieved from instagram
-type InstagramError ResponseMeta
+// Error represents an error recieved from instagram
+type Error ResponseMeta
 
-// Error makes the InstagramError suitable for the error interface
-func (err *InstagramError) Error() string {
+// Error makes the Error suitable for the error interface
+func (err *Error) Error() string {
 	return fmt.Sprintf("%s (%d): %s", err.ErrorType, err.Code, err.ErrorMessage)
 }
 
@@ -351,14 +352,14 @@ func CheckResponse(r *http.Response) error {
 
 	// Forbidden: see http://instagram.com/developer/restrict-api-requests/
 	if r.StatusCode == http.StatusForbidden {
-		err := &InstagramError{}
+		err := &Error{}
 		json.Unmarshal(data, &err)
 		return err
 	}
 
 	// RateLimit: see http://instagram.com/developer/limits/
 	if r.StatusCode == 429 {
-		err := &InstagramError{}
+		err := &Error{}
 		json.Unmarshal(data, &err)
 		return err
 	}
@@ -366,7 +367,7 @@ func CheckResponse(r *http.Response) error {
 	// Sometimes Instagram returns 500 with plain message
 	// "Oops, an error occurred.".
 	if r.StatusCode == http.StatusInternalServerError {
-		err := &InstagramError{
+		err := &Error{
 			ErrorType:    "Internal Server Error",
 			Code:         http.StatusInternalServerError,
 			ErrorMessage: "Oops, an error occurred.",
@@ -380,15 +381,12 @@ func CheckResponse(r *http.Response) error {
 		// SOMETIMES they are just Error{}. From what I can tell, there is not
 		// an obvious rationale behind what gets constructed in which way, so
 		// we need to try both:
-		err := &InstagramError{}
+		err := &Error{}
 		json.Unmarshal(data, err)
-		if *err != *new(InstagramError) {
-			// Unmarshaling did something
-			return err
-		} else {
+		if *err == *new(Error) {
 			// Unmarshaling did nothing for us, so the format was not Error{}.
 			// We will assume the format was {Meta: Error{}}:
-			temp := make(map[string]InstagramError)
+			temp := make(map[string]Error)
 			json.Unmarshal(data, &temp)
 
 			meta := temp["meta"]
@@ -396,6 +394,9 @@ func CheckResponse(r *http.Response) error {
 			delete(temp, "meta") // Probably uselesss
 			return &meta
 		}
+
+		// Unmarshaling did something
+		return err
 	}
 
 	return nil

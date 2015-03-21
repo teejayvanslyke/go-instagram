@@ -17,11 +17,11 @@ type LikesService struct {
 	client *Client
 }
 
-// MediaLikes gets a list of users who have liked mediaId.
+// MediaLikes gets a list of users who have liked mediaID.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/likes/#get_media_likes
-func (s *LikesService) MediaLikes(mediaId string) ([]User, error) {
-	u := fmt.Sprintf("media/%v/likes", mediaId)
+func (s *LikesService) MediaLikes(mediaID string) ([]User, error) {
+	u := fmt.Sprintf("media/%v/likes", mediaID)
 	req, err := s.client.NewRequest("GET", u, "")
 	if err != nil {
 		return nil, err
@@ -35,19 +35,19 @@ func (s *LikesService) MediaLikes(mediaId string) ([]User, error) {
 // Like a media.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/likes/#post_likes
-func (s *LikesService) Like(mediaId string) error {
-	return mediaLikesAction(s, mediaId, "POST")
+func (s *LikesService) Like(mediaID string) error {
+	return mediaLikesAction(s, mediaID, "POST")
 }
 
 // Unlike a media.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/likes/#delete_likes
-func (s *LikesService) Unlike(mediaId string) error {
-	return mediaLikesAction(s, mediaId, "DELETE")
+func (s *LikesService) Unlike(mediaID string) error {
+	return mediaLikesAction(s, mediaID, "DELETE")
 }
 
-func mediaLikesAction(s *LikesService, mediaId, method string) error {
-	u := fmt.Sprintf("media/%v/likes", mediaId)
+func mediaLikesAction(s *LikesService, mediaID, method string) error {
+	u := fmt.Sprintf("media/%v/likes", mediaID)
 	req, err := s.client.NewRequest(method, u, "")
 	if err != nil {
 		return err
