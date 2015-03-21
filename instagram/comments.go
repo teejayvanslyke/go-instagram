@@ -29,8 +29,8 @@ type Comment struct {
 // MediaComments gets a full list of comments on a media.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/comments/#get_media_comments
-func (s *CommentsService) MediaComments(mediaId string) ([]Comment, error) {
-	u := fmt.Sprintf("media/%v/comments", mediaId)
+func (s *CommentsService) MediaComments(mediaID string) ([]Comment, error) {
+	u := fmt.Sprintf("media/%v/comments", mediaID)
 	req, err := s.client.NewRequest("GET", u, "")
 	if err != nil {
 		return nil, err
@@ -44,8 +44,8 @@ func (s *CommentsService) MediaComments(mediaId string) ([]Comment, error) {
 // Add a comment on a media.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/comments/#post_media_comments
-func (s *CommentsService) Add(mediaId string, text []string) error {
-	u := fmt.Sprintf("media/%v/comments", mediaId)
+func (s *CommentsService) Add(mediaID string, text []string) error {
+	u := fmt.Sprintf("media/%v/comments", mediaID)
 	params := url.Values{
 		"text": text,
 	}
@@ -63,8 +63,8 @@ func (s *CommentsService) Add(mediaId string, text []string) error {
 // the authenticated user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/comments/#delete_media_comments
-func (s *CommentsService) Delete(mediaId, commentId string) error {
-	u := fmt.Sprintf("media/%v/comments/%v", mediaId, commentId)
+func (s *CommentsService) Delete(mediaID, commentID string) error {
+	u := fmt.Sprintf("media/%v/comments/%v", mediaID, commentID)
 	req, err := s.client.NewRequest("DELETE", u, "")
 	if err != nil {
 		return err

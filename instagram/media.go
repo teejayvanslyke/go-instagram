@@ -112,8 +112,8 @@ type MediaLocation struct {
 // Get information about a media object.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/media/#get_media
-func (s *MediaService) Get(mediaId string) (*Media, error) {
-	u := fmt.Sprintf("media/%v", mediaId)
+func (s *MediaService) Get(mediaID string) (*Media, error) {
+	u := fmt.Sprintf("media/%v", mediaID)
 	req, err := s.client.NewRequest("GET", u, "")
 	if err != nil {
 		return nil, err

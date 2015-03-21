@@ -35,10 +35,10 @@ type Relationship struct {
 // passed then it refers to `self` or curret authenticated user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#get_users_follows
-func (s *RelationshipsService) Follows(userId string) ([]User, *ResponsePagination, error) {
+func (s *RelationshipsService) Follows(userID string) ([]User, *ResponsePagination, error) {
 	var u string
-	if userId != "" {
-		u = fmt.Sprintf("users/%v/follows", userId)
+	if userID != "" {
+		u = fmt.Sprintf("users/%v/follows", userID)
 	} else {
 		u = "users/self/follows"
 	}
@@ -67,10 +67,10 @@ func (s *RelationshipsService) Follows(userId string) ([]User, *ResponsePaginati
 // passed then it refers to `self` or curret authenticated user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#get_users_followed_by
-func (s *RelationshipsService) FollowedBy(userId string) ([]User, *ResponsePagination, error) {
+func (s *RelationshipsService) FollowedBy(userID string) ([]User, *ResponsePagination, error) {
 	var u string
-	if userId != "" {
-		u = fmt.Sprintf("users/%v/followed-by", userId)
+	if userID != "" {
+		u = fmt.Sprintf("users/%v/followed-by", userID)
 	} else {
 		u = "users/self/followed-by"
 	}
@@ -123,54 +123,54 @@ func (s *RelationshipsService) RequestedBy() ([]User, *ResponsePagination, error
 // Relationship gets information about a relationship to another user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#get_relationship
-func (s *RelationshipsService) Relationship(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "", "GET")
+func (s *RelationshipsService) Relationship(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "", "GET")
 }
 
 // Follow a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Follow(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "follow", "POST")
+func (s *RelationshipsService) Follow(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "follow", "POST")
 }
 
 // Unfollow a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Unfollow(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "unfollow", "POST")
+func (s *RelationshipsService) Unfollow(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "unfollow", "POST")
 }
 
 // Block a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Block(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "block", "POST")
+func (s *RelationshipsService) Block(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "block", "POST")
 }
 
 // Unblock a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Unblock(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "unblock", "POST")
+func (s *RelationshipsService) Unblock(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "unblock", "POST")
 }
 
 // Approve a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Approve(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "approve", "POST")
+func (s *RelationshipsService) Approve(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "approve", "POST")
 }
 
 // Deny a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#post_relationship
-func (s *RelationshipsService) Deny(userId string) (*Relationship, error) {
-	return relationshipAction(s, userId, "deny", "POST")
+func (s *RelationshipsService) Deny(userID string) (*Relationship, error) {
+	return relationshipAction(s, userID, "deny", "POST")
 }
 
-func relationshipAction(s *RelationshipsService, userId, action, method string) (*Relationship, error) {
-	u := fmt.Sprintf("users/%v/relationship", userId)
+func relationshipAction(s *RelationshipsService, userID, action, method string) (*Relationship, error) {
+	u := fmt.Sprintf("users/%v/relationship", userID)
 	if action != "" {
 		action = "action=" + action
 	}

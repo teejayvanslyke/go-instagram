@@ -41,10 +41,10 @@ type UserCount struct {
 // user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/users/#get_users
-func (s *UsersService) Get(userId string) (*User, error) {
+func (s *UsersService) Get(userID string) (*User, error) {
 	var u string
-	if userId != "" {
-		u = fmt.Sprintf("users/%v", userId)
+	if userID != "" {
+		u = fmt.Sprintf("users/%v", userID)
 	} else {
 		u = "users/self"
 	}
@@ -100,10 +100,10 @@ func (s *UsersService) MediaFeed(opt *Parameters) ([]Media, *ResponsePagination,
 // RecentMedia gets the most recent media published by a user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/users/#get_users_media_recent
-func (s *UsersService) RecentMedia(userId string, opt *Parameters) ([]Media, *ResponsePagination, error) {
+func (s *UsersService) RecentMedia(userID string, opt *Parameters) ([]Media, *ResponsePagination, error) {
 	var u string
-	if userId != "" {
-		u = fmt.Sprintf("users/%v/media/recent", userId)
+	if userID != "" {
+		u = fmt.Sprintf("users/%v/media/recent", userID)
 	} else {
 		u = "users/self/media/recent"
 	}

@@ -23,8 +23,8 @@ type GeographiesService struct {
 // real-time subscriptions.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/geographies/#get_geographies_media_recent
-func (s *GeographiesService) RecentMedia(geoId string, opt *Parameters) ([]Media, *ResponsePagination, error) {
-	u := fmt.Sprintf("geographies/%v/media/recent", geoId)
+func (s *GeographiesService) RecentMedia(geoID string, opt *Parameters) ([]Media, *ResponsePagination, error) {
+	u := fmt.Sprintf("geographies/%v/media/recent", geoID)
 	if opt != nil {
 		params := url.Values{}
 		if opt.MinID != "" {
