@@ -124,6 +124,21 @@ func (s *MediaService) Get(mediaID string) (*Media, error) {
 	return media, err
 }
 
+// Get information about a media object with the shortcode.
+//
+// Instagram API docs: http://instagram.com/developer/endpoints/media/shortcode/#get_media
+func (s *MediaService) GetShortcode(shortcode string) (*Media, error) {
+	u := fmt.Sprintf("media/shortcode/%v", shortcode)
+	req, err := s.client.NewRequest("GET", u, "")
+	if err != nil {
+		return nil, err
+	}
+
+	media := new(Media)
+	_, err = s.client.Do(req, media)
+	return media, err
+}
+
 // Search return search results for media in a given area.
 //
 // http://instagram.com/developer/endpoints/media/#get_media_search
