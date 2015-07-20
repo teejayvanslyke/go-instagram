@@ -66,8 +66,8 @@ type UserInPhoto struct {
 
 // UserInPhotoPosition represents position of the user on Instagram photo.
 type UserInPhotoPosition struct {
-	x float64 `json:"x,omitempty"`
-	y float64 `json:"y,omitempty"`
+	X float64 `json:"x,omitempty"`
+	Y float64 `json:"y,omitempty"`
 }
 
 // MediaImages represents MediaImage with various resolutions.

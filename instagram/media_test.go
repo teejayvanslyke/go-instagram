@@ -32,6 +32,31 @@ func TestMediaService_Get(t *testing.T) {
 	}
 }
 
+func TestMediaService_UsersInPhoto(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/media/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{"data":{"id": "1", "users_in_photo": [{"user":null,"position":{"x":3.14159,"y":3.14159}}]}}`)
+	})
+
+	media, err := client.Media.Get("1")
+	if err != nil {
+		t.Errorf("Media.Get returned error: %v", err)
+	}
+
+	want := &Media{
+		ID: "1",
+		UsersInPhoto: []*UserInPhoto{
+			&UserInPhoto{Position: &UserInPhotoPosition{X: 3.14159, Y: 3.14159}},
+		},
+	}
+	if !reflect.DeepEqual(media, want) {
+		t.Errorf("Media.Get returned %+v, want %+v", media, want)
+	}
+}
+
 func TestMediaService_GetShortcode(t *testing.T) {
 	setup()
 	defer teardown()
