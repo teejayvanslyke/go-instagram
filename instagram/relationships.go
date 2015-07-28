@@ -7,6 +7,8 @@ package instagram
 
 import (
 	"fmt"
+	"net/url"
+	"strconv"
 )
 
 // RelationshipsService handles communication with the user's relationships related
