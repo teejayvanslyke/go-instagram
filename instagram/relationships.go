@@ -50,8 +50,8 @@ func (s *RelationshipsService) Follows(userID string, opt *Parameters) ([]User, 
 		if opt.Count != 0 {
 			params.Add("count", strconv.FormatUint(opt.Count, 10))
 		}
-		if opt.Cursor != "" {
-			params.Add("cursor", opt.Cursor)
+		if opt.Cursor != 0 {
+			params.Add("cursor", strconv.FormatUint(opt.Cursor, 10))
 		}
 		u += "?" + params.Encode()
 	}
@@ -93,8 +93,8 @@ func (s *RelationshipsService) FollowedBy(userID string, opt *Parameters) ([]Use
 		if opt.Count != 0 {
 			params.Add("count", strconv.FormatUint(opt.Count, 10))
 		}
-		if opt.Cursor != "" {
-			params.Add("cursor", opt.Cursor)
+		if opt.Cursor != 0 {
+			params.Add("cursor", strconv.FormatUint(opt.Cursor, 10))
 		}
 		u += "?" + params.Encode()
 	}
