@@ -35,12 +35,23 @@ type Relationship struct {
 // passed then it refers to `self` or curret authenticated user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#get_users_follows
-func (s *RelationshipsService) Follows(userID string) ([]User, *ResponsePagination, error) {
+func (s *RelationshipsService) Follows(userID string, opt *Parameters) ([]User, *ResponsePagination, error) {
 	var u string
 	if userID != "" {
 		u = fmt.Sprintf("users/%v/follows", userID)
 	} else {
 		u = "users/self/follows"
+	}
+
+	if opt != nil {
+		params := url.Values{}
+		if opt.Count != 0 {
+			params.Add("count", strconv.FormatUint(opt.Count, 10))
+		}
+		if opt.Cursor != "" {
+			params.Add("cursor", opt.Cursor)
+		}
+		u += "?" + params.Encode()
 	}
 
 	req, err := s.client.NewRequest("GET", u, "")
@@ -67,12 +78,23 @@ func (s *RelationshipsService) Follows(userID string) ([]User, *ResponsePaginati
 // passed then it refers to `self` or curret authenticated user.
 //
 // Instagram API docs: http://instagram.com/developer/endpoints/relationships/#get_users_followed_by
-func (s *RelationshipsService) FollowedBy(userID string) ([]User, *ResponsePagination, error) {
+func (s *RelationshipsService) FollowedBy(userID string, opt *Parameters) ([]User, *ResponsePagination, error) {
 	var u string
 	if userID != "" {
 		u = fmt.Sprintf("users/%v/followed-by", userID)
 	} else {
 		u = "users/self/followed-by"
+	}
+
+	if opt != nil {
+		params := url.Values{}
+		if opt.Count != 0 {
+			params.Add("count", strconv.FormatUint(opt.Count, 10))
+		}
+		if opt.Cursor != "" {
+			params.Add("cursor", opt.Cursor)
+		}
+		u += "?" + params.Encode()
 	}
 
 	req, err := s.client.NewRequest("GET", u, "")
