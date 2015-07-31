@@ -199,6 +199,7 @@ type ResponseMeta struct {
 type ResponsePagination struct {
 	NextURL   string `json:"next_url,omitempty"`
 	NextMaxID string `json:"next_max_id,omitempty"`
+	Cursor    string `json:"next_cursor,omitempty"`
 }
 
 // NewClient returns a new Instagram API client. if a nil httpClient is
