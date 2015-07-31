@@ -18,10 +18,17 @@ func TestRelationshipsService_Follows_self(t *testing.T) {
 
 	mux.HandleFunc("/users/self/follows", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testFormValues(t, r, values{
+			"count": "1",
+		})
 		fmt.Fprint(w, `{"data": [{"id":"1"}]}`)
 	})
 
-	users, _, err := client.Relationships.Follows("")
+	opt := &Parameters{
+		Count: 1,
+	}
+
+	users, _, err := client.Relationships.Follows("", opt)
 	if err != nil {
 		t.Errorf("Relationships.Follows returned error: %v", err)
 	}
@@ -38,10 +45,17 @@ func TestRelationshipsService_Follows_userId(t *testing.T) {
 
 	mux.HandleFunc("/users/1/follows", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testFormValues(t, r, values{
+			"count": "1",
+		})
 		fmt.Fprint(w, `{"data": [{"id":"1"}]}`)
 	})
 
-	users, _, err := client.Relationships.Follows("1")
+	opt := &Parameters{
+		Count: 1,
+	}
+
+	users, _, err := client.Relationships.Follows("1", opt)
 	if err != nil {
 		t.Errorf("Relationships.Follows returned error: %v", err)
 	}
@@ -58,10 +72,17 @@ func TestRelationshipsService_FollowedBy_self(t *testing.T) {
 
 	mux.HandleFunc("/users/self/followed-by", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testFormValues(t, r, values{
+			"count": "1",
+		})
 		fmt.Fprint(w, `{"data": [{"id":"1"}]}`)
 	})
 
-	users, _, err := client.Relationships.FollowedBy("")
+	opt := &Parameters{
+		Count: 1,
+	}
+
+	users, _, err := client.Relationships.FollowedBy("", opt)
 	if err != nil {
 		t.Errorf("Relationships.FollowedBy returned error: %v", err)
 	}
@@ -78,10 +99,17 @@ func TestRelationshipsService_FollowedBy_userId(t *testing.T) {
 
 	mux.HandleFunc("/users/1/followed-by", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testFormValues(t, r, values{
+			"count": "1",
+		})
 		fmt.Fprint(w, `{"data": [{"id":"1"}]}`)
 	})
 
-	users, _, err := client.Relationships.FollowedBy("1")
+	opt := &Parameters{
+		Count: 1,
+	}
+
+	users, _, err := client.Relationships.FollowedBy("1", opt)
 	if err != nil {
 		t.Errorf("Relationships.FollowedBy returned error: %v", err)
 	}
