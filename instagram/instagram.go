@@ -185,6 +185,12 @@ func (r *Response) NextMaxID() string {
 	return p.NextMaxID
 }
 
+// Cursor gets Cursor parameter that can be passed for next request.
+func (r *Response) Cursor() string {
+	p := r.GetPagination()
+	return p.Cursor
+}
+
 // ResponseMeta represents information about the response. If all goes well,
 // only a Code key with value 200 will present. However, sometimes things
 // go wrong, and in that case ErrorType and ErrorMessage are present.
