@@ -101,6 +101,7 @@ type Client struct {
 // Parameters specifies the optional parameters to various service's methods.
 type Parameters struct {
 	Count        uint64
+	Cursor       uint64
 	MinID        string
 	MaxID        string
 	MinTimestamp int64
@@ -184,6 +185,12 @@ func (r *Response) NextMaxID() string {
 	return p.NextMaxID
 }
 
+// Cursor gets Cursor parameter that can be passed for next request.
+func (r *Response) Cursor() string {
+	p := r.GetPagination()
+	return p.Cursor
+}
+
 // ResponseMeta represents information about the response. If all goes well,
 // only a Code key with value 200 will present. However, sometimes things
 // go wrong, and in that case ErrorType and ErrorMessage are present.
@@ -198,6 +205,7 @@ type ResponseMeta struct {
 type ResponsePagination struct {
 	NextURL   string `json:"next_url,omitempty"`
 	NextMaxID string `json:"next_max_id,omitempty"`
+	Cursor    string `json:"next_cursor,omitempty"`
 }
 
 // NewClient returns a new Instagram API client. if a nil httpClient is
