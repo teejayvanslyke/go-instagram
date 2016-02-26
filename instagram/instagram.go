@@ -101,7 +101,7 @@ type Client struct {
 // Parameters specifies the optional parameters to various service's methods.
 type Parameters struct {
 	Count        uint64
-	Cursor       uint64
+	Cursor       string
 	MinID        string
 	MaxID        string
 	MinTimestamp int64
