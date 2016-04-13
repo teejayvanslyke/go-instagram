@@ -41,6 +41,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 )
 
@@ -82,6 +83,10 @@ type Client struct {
 	// http://instagram.com/developer/restrict-api-requests/
 	// for additional detail
 	XInstaForwardedFor string
+
+	// When enabled, uses instagram recommended signing process.
+	// Signing should be enabled on instagram API account config.
+	SignedRequests bool
 
 	// Services used for talking to different parts of the API.
 	Users         *UsersService
@@ -246,6 +251,30 @@ func (c *Client) ComputeXInstaForwardedFor() string {
 	return fmt.Sprintf("%s|%s", c.XInstaForwardedFor, hex.EncodeToString(mac.Sum(nil)))
 }
 
+// ComputeHmac256 creates a HMAC representation of a message for signatures
+func ComputeHmac256(message, secret string) string {
+	key := []byte(secret)
+	h := hmac.New(sha256.New, key)
+	h.Write([]byte(message))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+// GenerateSignature creates a signature for the specified query params
+func (c *Client) GenerateSignature(endpoint string, params url.Values) string {
+	sig := "/" + endpoint
+	keys := make([]string, len(params))
+	i := 0
+	for k := range params {
+		keys[i] = k
+		i++
+	}
+	sort.Strings(keys)
+	for _, v := range keys {
+		sig += fmt.Sprintf("|%s=%s", v, params[v][0])
+	}
+	return ComputeHmac256(sig, c.ClientSecret)
+}
+
 // NewRequest creates an API request. A relative URL can be provided in urlStr,
 // in which case it is resolved relative to the BaseURL of the Client.
 // Relative URLs should always be specified without a preceding slash. If
@@ -261,12 +290,16 @@ func (c *Client) NewRequest(method, urlStr string, body string) (*http.Request, 
 	if c.AccessToken != "" && q.Get("access_token") == "" {
 		q.Set("access_token", c.AccessToken)
 	}
-	if c.ClientID != "" && q.Get("client_id") == "" {
+	if !c.SignedRequests && c.ClientID != "" && q.Get("client_id") == "" {
 		q.Set("client_id", c.ClientID)
 	}
-	if c.ClientSecret != "" && q.Get("client_secret") == "" {
+	if !c.SignedRequests && c.ClientSecret != "" && q.Get("client_secret") == "" {
 		q.Set("client_secret", c.ClientSecret)
 	}
+	if c.SignedRequests && q.Get("sig") == "" {
+		q.Set("sig", c.GenerateSignature(urlStr, q))
+	}
+
 	u.RawQuery = q.Encode()
 
 	req, err := http.NewRequest(method, u.String(), bytes.NewBufferString(body))
