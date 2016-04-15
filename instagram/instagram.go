@@ -290,14 +290,15 @@ func (c *Client) NewRequest(method, urlStr string, body string) (*http.Request, 
 	if c.AccessToken != "" && q.Get("access_token") == "" {
 		q.Set("access_token", c.AccessToken)
 	}
-	if !c.SignedRequests && c.ClientID != "" && q.Get("client_id") == "" {
+	if c.ClientID != "" && q.Get("client_id") == "" {
 		q.Set("client_id", c.ClientID)
 	}
-	if !c.SignedRequests && c.ClientSecret != "" && q.Get("client_secret") == "" {
+	if c.ClientSecret != "" && q.Get("client_secret") == "" {
 		q.Set("client_secret", c.ClientSecret)
 	}
 	if c.SignedRequests && q.Get("sig") == "" {
-		q.Set("sig", c.GenerateSignature(urlStr, q))
+		sig := c.GenerateSignature(rel.Path, q)
+		q.Set("sig", sig)
 	}
 
 	u.RawQuery = q.Encode()
