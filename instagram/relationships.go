@@ -7,6 +7,7 @@ package instagram
 
 import (
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"net/url"
 	"strconv"
 )
@@ -205,6 +206,6 @@ func relationshipAction(s *RelationshipsService, userID, action, method string) 
 
 	rel := new(Relationship)
 	res, err = s.client.Do(req, rel)
-	log.Printf("%+v\n", res)
+	log.Errorf("%+v\n", res)
 	return rel, err
 }
