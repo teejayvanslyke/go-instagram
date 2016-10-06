@@ -329,7 +329,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	//defer resp.Body.Close() this is so dumb
 
 	err = CheckResponse(resp)
 	if err != nil {
