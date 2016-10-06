@@ -208,7 +208,7 @@ func relationshipAction(s *RelationshipsService, userID, action, method string) 
 	rel := new(Relationship)
 	res, err := s.client.Do(req, rel)
 
-	data, readErr := ioutil.ReadAll(r.Body)
+	data, readErr := ioutil.ReadAll(res.Body)
 	if readErr != nil {
 		return readErr
 	}
