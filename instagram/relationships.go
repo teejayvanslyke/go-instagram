@@ -210,8 +210,9 @@ func relationshipAction(s *RelationshipsService, userID, action, method string) 
 
 	data, readErr := ioutil.ReadAll(res.Body)
 	if readErr != nil {
-		return readErr
+		log.Error(readErr)
 	}
 	log.Errorf("%+v\n", data)
+
 	return rel, err
 }
