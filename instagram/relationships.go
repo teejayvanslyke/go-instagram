@@ -205,7 +205,7 @@ func relationshipAction(s *RelationshipsService, userID, action, method string) 
 	}
 
 	rel := new(Relationship)
-	res, err = s.client.Do(req, rel)
+	res, err := s.client.Do(req, rel)
 	log.Errorf("%+v\n", res)
 	return rel, err
 }
